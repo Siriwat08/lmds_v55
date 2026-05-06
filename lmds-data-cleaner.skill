@@ -1,0 +1,32 @@
+YAML
+name: lmds-data-cleaner
+description: Provides robust data cleaning and standardization capabilities for LMDS, focusing on parsing and normalizing person names, addresses, and geo-locations. Use this skill when processing raw logistics data from Google Sheets that requires standardization for master data management and matching.
+LMDS Data Cleaner
+Overview
+This skill enables the comprehensive cleaning and standardization of raw logistics data, specifically designed for the LMDS (Logistics Master Data System) project. It transforms unstructured or inconsistent data from sources like Google Sheets into a clean, standardized format suitable for master data management, matching, and analysis.
+Core Capabilities
+This skill provides a set of interrelated capabilities to achieve high-quality data:
+1. Smart Name Parser
+Description: Extracts and normalizes person/company names, phone numbers, and tax IDs from raw text strings. It also identifies the entity type (Person or Company) and derives a "core name" for effective deduplication and matching.
+Usage: Utilizes the parsePersonName function within 05_NormalizeService_patch.gs.
+2. Address Parser & Thai Context
+Description: Deconstructs raw address strings into structured components (house number, soi, road, subdistrict, district, province, postal code). It leverages ชื่อที่อยู่จาก_LatLong and integrates with SYS_TH_GEO data for validation and standardization, ensuring accuracy within the Thai geographical context.
+Usage: Utilizes the parseAddress function within 05_NormalizeService_patch.gs and relies on the getThaiGeo function (to be implemented from SYS_TH_GEO sheet).
+3. Geo-location Extraction & Validation
+Description: Extracts and validates latitude and longitude coordinates, standardizing their format. It also includes functions to calculate geographical distance scores, which are crucial for enhancing the accuracy of place matching.
+Usage: Utilizes calculateGeoDistanceScore and enhancePlaceScoreWithGeo functions within 07_PlaceService_patch.gs.
+4. Data Processing Pipeline
+Description: A conceptual pipeline that outlines the flow of data from raw input through various cleaning and standardization modules to the final Master Data and Fact Data tables. This provides a holistic view of the data transformation process.
+Reference: See references/data_cleaning_pipeline.md for the detailed flowchart and explanation.
+5. Schema V2 for Standardized Data
+Description: Defines the structured format for Master Data (M_PERSON, M_PLACE, M_GEO_POINT) and Fact Data (FACT_DELIVERY) tables, designed to store the cleaned and standardized output from the data cleaning process.
+Reference: See references/schema_v2.md for the complete schema definitions.
+Resources
+This skill bundles the following resources:
+scripts/
+05_NormalizeService_patch.gs: Contains core functions for cleanThaiText, parsePersonName, parseAddress, and normalizeSourceRow.
+07_PlaceService_patch.gs: Contains functions for enhancePlaceScoreWithGeo and calculateGeoDistanceScore.
+references/
+data_cleaning_pipeline.md: Detailed explanation of the data cleaning pipeline.
+schema_v2.md: Definitions for Schema V2 of LMDS Master and Fact Data.
+Note: The getThaiGeo function within 05_NormalizeService_patch.gs is a placeholder and requires implementation to read data from your SYS_TH_GEO Google Sheet.
